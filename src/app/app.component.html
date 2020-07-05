@@ -1,0 +1,60 @@
+<!-- List of Lists -->
+<div class="todoList" *ngIf='listOfLists; else elseBlock'>
+  <div>
+    <h2>ToDo List</h2>
+    <ul class='ulListTodo'>
+      <li class='unDone' *ngFor='let todoList of todoLists' (click)='inList(todoList._id)'>
+        <h4>{{todoList.text}}</h4>
+        <h4>{{counterDoneTodos(todoList._id)}}/{{counterAllTodos(todoList._id)}}</h4>
+      </li>
+    </ul>
+  </div>
+  <div class='inputNewTodo'>
+    <mat-form-field class="example-form-field">
+      <mat-label>New list...</mat-label>
+      <input #newListInput (keyup.enter)="addList(newListInput.value); newListInput.value=''"
+        (blur)='newListInput.value=""' (change)='newListName($event)' matInput type="text">
+    </mat-form-field>
+    <button (click)="clickCreate()" class="button" mat-raised-button color="primary">Create</button>
+  </div>
+</div>
+<!-- Inside list -->
+<ng-template #elseBlock>
+  <div class="todoList">
+    <div>
+      <mat-form-field class="example-form-field">
+        <mat-label>Search</mat-label>
+        <input #SearchTodo (input)='searchValue($event)' (blur)='SearchTodo.value =""; searchTextReset()' matInput type="text">
+      </mat-form-field>
+      <section class="example-section">
+        <mat-radio-group (change)='onChangeFilter($event)'>
+          <mat-radio-button class="example-margin" value=false checked>All</mat-radio-button>
+          <mat-radio-button class="example-margin" value=true>Undone</mat-radio-button>
+        </mat-radio-group>
+      </section>
+      <div>
+        <ul class='ulTodo'>
+          <li *ngFor="let item of todos">
+            <ng-container *ngIf='currentIdList === item._idList'>
+              <ng-container *ngIf='searchTodo(item.text) || !searchText'>
+                <ng-container *ngIf='!filter || item.done !== filter'>
+                  <p [ngClass]="(item.done)?'done':'unDone'">{{item.text}}</p>
+                  <p class='iconClose' (click)="changeDone(item._id)">
+                    <mat-icon *ngIf='!item.done'>close</mat-icon>
+                  </p>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class='inputNewTodo'>
+      <mat-form-field class="example-form-field">
+        <mat-label>Add todo...</mat-label>
+        <input #newTodoInput matInput type="text" (keyup.enter)="newTodo(newTodoInput.value); newTodoInput.value ='' ">
+      </mat-form-field>
+      <button (click)="outList()" class="button" mat-raised-button color="primary">Back</button>
+    </div>
+  </div>
+</ng-template>

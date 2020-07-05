@@ -1,0 +1,85 @@
+.todoList {
+  width: 400px;
+  min-height: 600px;
+  margin: 50px auto;
+  background: linear-gradient(#13b8b8f3, #9198e5);
+  border: solid 1px rgb(63, 31, 31);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  color: #2d39bd;
+
+  .inputNewTodo{
+    grid-row-start: 2;
+    grid-row-end: 3;
+  }
+
+  h2{
+    text-align: center;
+    color: #2d39bd
+  }
+}
+
+.example-form-field {
+  width: 390px;
+  margin: 5px 5px 0;
+} 
+
+.button{
+  margin: 0 10px 10px;
+  width: 380px;
+}
+  
+.example-h2 {
+  margin: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+.example-margin {
+  margin: 0 10px;
+}
+
+.ulTodo {
+  list-style-type: none;
+  padding: 0 10px ;
+
+  li{
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+}  
+
+.ulListTodo {
+  list-style-type: none;
+  padding: 0 10px;
+
+  li{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+  }
+
+  li:hover{
+    transition: all 500ms;
+    color: white
+  }
+}  
+
+.done{
+  font-family: "Century Gothic";
+  text-decoration: line-through;
+  }
+
+.unDone{
+  font-family: "Tahoma";
+}
+
+.iconClose:hover{
+  transition: all 500ms;
+  color: white
+}
