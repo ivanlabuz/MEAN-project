@@ -2,8 +2,9 @@
   width: 400px;
   min-height: 600px;
   margin: 50px auto;
-  background: linear-gradient(#13b8b8f3, #9198e5);
-  border: solid 1px rgb(63, 31, 31);
+  border: groove 1px #13246e;
+  box-shadow: 20px 20px rgb(108, 47, 165);
+  border-radius: 10px 10px;
   display: grid;
   grid-template-rows: 1fr auto;
   color: #2d39bd;

@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { MatRadioChange } from '@angular/material/radio';
 
 interface Todo {
-  _id: number;
-  _idList: number;
+  _id: string;
+  _idList: string;
   text: string;
   done: boolean;
 }
 
 interface TodoList {
-  _id: number;
+  _id: string;
   text: string;
 }
 
@@ -22,55 +22,55 @@ interface TodoList {
 export class AppComponent {
   filter = false;
   listOfLists = true;
-  currentIdList: number;
+  currentIdList: string;
   newNameForList: string;
   searchText: RegExp;
 
   todoLists: TodoList[] = [
     {
-      _id: 1,
+      _id: '1',
       text: 'Список на сегодня'
     },
     {
-      _id: 2,
+      _id: '2',
       text: 'Список на завтра'
     }
   ];
 
   todos: Todo[] = [
     {
-      _id: 100,
-      _idList: 1,
+      _id: '100',
+      _idList: '1',
       text: 'Купить продукты',
       done: false
     },
     {
-      _id: 101,
-      _idList: 1,
+      _id: '101',
+      _idList: '1',
       text: 'Купить носки',
       done: false
     },
     {
-      _id: 102,
-      _idList: 1,
+      _id: '102',
+      _idList: '1',
       text: 'Купить табак',
       done: true
     },
     {
-      _id: 103,
-      _idList: 2,
+      _id: '103',
+      _idList: '2',
       text: 'Купить еду',
       done: false
     },
     {
-      _id: 104,
-      _idList: 2,
+      _id: '104',
+      _idList: '2',
       text: 'Купить собаку',
       done: true
     },
   ];
 
-  changeDone(id: number): void {
+  changeDone(id: string): void {
     this.todos.forEach(item => {
       if (item._id === id) {
         item.done = true;
@@ -85,7 +85,7 @@ export class AppComponent {
   newTodo(value: string): void {
     if (value) {
       this.todos.push({
-        _id: new Date().getTime(),
+        _id: 'new Date().getTime()',
         _idList: this.currentIdList,
         text: value,
         done: false
@@ -93,26 +93,27 @@ export class AppComponent {
     }
   }
 
-  counterAllTodos(id: number): number {
+  counterAllTodos(id: string): number {
     return this.todos.filter(item => item._idList === id).length;
   }
-  counterDoneTodos(id: number): number {
+  counterDoneTodos(id: string): number {
     return this.todos.filter(item => item._idList === id).filter(item => item.done === true).length;
   }
 
-  inList(id: number): void {
+  inList(id: string): void {
     this.listOfLists = false;
     this.currentIdList = id;
   }
 
   outList(): void {
     this.listOfLists = true;
+    this.filter = false;
   }
 
   addList(newList: string): void {
     if (newList) {
       this.todoLists.push({
-        _id: new Date().getTime(),
+        _id: 'new Date().getTime()',
         text: newList
       });
     }
@@ -125,7 +126,7 @@ export class AppComponent {
   clickCreate(): void {
     if (this.newNameForList) {
       this.todoLists.push({
-        _id: new Date().getTime(),
+        _id: 'new Date().getTime()',
         text: this.newNameForList
       });
     }
@@ -143,7 +144,7 @@ export class AppComponent {
     }
   }
 
-  searchTextReset() {
+  searchTextReset(): void {
     this.searchText = undefined;
   }
 }
