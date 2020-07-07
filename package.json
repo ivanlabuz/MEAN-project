@@ -11,7 +11,7 @@
     "debug": "nodemon ./server/bin/www",
     "start server": "node ./server/bin/www"
   },
-  "proxy": "http://localhost:3000",
+  "proxy": "http://localhost:8000",
   "private": true,
   "dependencies": {
     "@angular/animations": "~9.1.11",

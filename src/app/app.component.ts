@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatRadioChange } from '@angular/material/radio';
+import { HttpService } from './http.service';
 
 interface Todo {
   _id: string;
@@ -16,61 +17,40 @@ interface TodoList {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [HttpService]
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
   filter = false;
   listOfLists = true;
   currentIdList: string;
   newNameForList: string;
   searchText: RegExp;
+  errorList: any;
+  errorTodo: any;
+  noTodo = true;
+  todoLists: TodoList[] = [];
+  todos: Todo[] = [];
+  isLoading = true;
 
-  todoLists: TodoList[] = [
-    {
-      _id: '1',
-      text: 'Список на сегодня'
-    },
-    {
-      _id: '2',
-      text: 'Список на завтра'
-    }
-  ];
+  constructor(private httpService: HttpService) { }
 
-  todos: Todo[] = [
-    {
-      _id: '100',
-      _idList: '1',
-      text: 'Купить продукты',
-      done: false
-    },
-    {
-      _id: '101',
-      _idList: '1',
-      text: 'Купить носки',
-      done: false
-    },
-    {
-      _id: '102',
-      _idList: '1',
-      text: 'Купить табак',
-      done: true
-    },
-    {
-      _id: '103',
-      _idList: '2',
-      text: 'Купить еду',
-      done: false
-    },
-    {
-      _id: '104',
-      _idList: '2',
-      text: 'Купить собаку',
-      done: true
-    },
-  ];
+  ngOnInit() {
+    this.httpService.getData().subscribe(
+      (data: Array<Array<TodoList>>) => this.todoLists = data[0],
+      error => { this.errorList = error.message; console.log(error); });
+    this.httpService.getData().subscribe(
+      (data: Array<Array<Todo>>) => { this.todos = data[1], this.isLoading = false; },
+      error => { this.errorTodo = error.message; console.log(error); });
+  }
 
   changeDone(id: string): void {
+    const editTodo = this.todos.find(item => item._id === id);
+    editTodo.done = true;
+    this.httpService.putTodo(editTodo).subscribe(
+      (data: Todo) => data,
+      error => { this.errorTodo = error.message; console.log(error); });
     this.todos.forEach(item => {
       if (item._id === id) {
         item.done = true;
@@ -84,25 +64,44 @@ export class AppComponent {
 
   newTodo(value: string): void {
     if (value) {
-      this.todos.push({
-        _id: 'new Date().getTime()',
+      const newCurrentTodo = {
         _idList: this.currentIdList,
         text: value,
         done: false
-      });
+      };
+      this.httpService.postTodo(newCurrentTodo)
+        .subscribe(
+          (data: Todo) => this.todos.push(data),
+          error => console.log(error)
+        );
+      this.noTodo = true;
     }
   }
 
   counterAllTodos(id: string): number {
-    return this.todos.filter(item => item._idList === id).length;
+    if (this.todos.length) {
+      return this.todos.filter(item => item._idList === id).length;
+    } else {
+      return 0;
+    }
   }
+
   counterDoneTodos(id: string): number {
-    return this.todos.filter(item => item._idList === id).filter(item => item.done === true).length;
+    if (this.todos.length) {
+      return this.todos
+        .filter(item => item._idList === id)
+        .filter(item => item.done === true).length;
+    } else {
+      return 0;
+    }
   }
 
   inList(id: string): void {
     this.listOfLists = false;
     this.currentIdList = id;
+    if (!this.todos.filter(item => item._idList === id).length) {
+      this.noTodo = false;
+    }
   }
 
   outList(): void {
@@ -112,10 +111,11 @@ export class AppComponent {
 
   addList(newList: string): void {
     if (newList) {
-      this.todoLists.push({
-        _id: 'new Date().getTime()',
-        text: newList
-      });
+      this.httpService.postList(newList)
+        .subscribe(
+          (data: TodoList) => this.todoLists.push(data),
+          error => console.log(error)
+        );
     }
   }
 
@@ -125,10 +125,11 @@ export class AppComponent {
 
   clickCreate(): void {
     if (this.newNameForList) {
-      this.todoLists.push({
-        _id: 'new Date().getTime()',
-        text: this.newNameForList
-      });
+      this.httpService.postList(this.newNameForList)
+        .subscribe(
+          (data: TodoList) => this.todoLists.push(data),
+          error => console.log(error)
+        );
     }
   }
 

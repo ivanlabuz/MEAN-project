@@ -16,7 +16,11 @@
 
   h2{
     text-align: center;
-    color: #2d39bd
+  }
+
+  h1 {
+    text-align: center;
+    margin-top: 50%;
   }
 }
 
@@ -59,28 +63,30 @@
   list-style-type: none;
   padding: 0 10px;
 
-  li{
+  li {
     display: flex;
     justify-content: space-between;
     padding: 5px;
   }
 
-  li:hover{
+  li:hover {
     transition: all 500ms;
     color: white
   }
 }  
 
-.done{
+.done {
   font-family: "Century Gothic";
   text-decoration: line-through;
   }
 
-.unDone{
+.unDone {
   font-family: "Tahoma";
 }
 
-.iconClose:hover{
+.iconClose:hover {
   transition: all 500ms;
   color: white
 }
+
+

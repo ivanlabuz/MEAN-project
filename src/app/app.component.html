@@ -1,14 +1,17 @@
 <!-- List of Lists -->
+<div>{{errorList}}</div>
 <div class="todoList" *ngIf='listOfLists; else elseBlock'>
   <div>
     <h2>ToDo List</h2>
-    <ng-container *ngIf='todoLists.length; else NoList' >
-    <ul class='ulListTodo'>
-      <li class='unDone' *ngFor='let todoList of todoLists' (click)='inList(todoList._id)'>
-        <h4>{{todoList.text}}</h4>
-        <h4>{{counterDoneTodos(todoList._id)}}/{{counterAllTodos(todoList._id)}}</h4>
-      </li>
-    </ul>
+    <ng-container *ngIf='!isLoading; else Loading'>
+      <ng-container *ngIf='todoLists.length; else NoList'>
+        <ul class='ulListTodo'>
+          <li class='unDone' *ngFor='let todoList of todoLists' (click)='inList(todoList._id)'>
+            <h4>{{todoList.text}}</h4>
+            <h4>{{counterDoneTodos(todoList._id)}}/{{counterAllTodos(todoList._id)}}</h4>
+          </li>
+        </ul>
+      </ng-container>
     </ng-container>
   </div>
   <div class='inputNewTodo'>
@@ -20,14 +23,22 @@
     <button (click)="clickCreate()" class="button" mat-raised-button color="primary">Create</button>
   </div>
 </div>
- <ng-template #NoList><h3>Add list.</h3></ng-template>
+<ng-template class="noList" #NoList>
+  <h1>Сreate a new list.</h1>
+</ng-template>
+<ng-template #Loading>
+  <h1>Loading...</h1>
+</ng-template>
+<!-- End list of Lists -->
 <!-- Inside list -->
 <ng-template #elseBlock>
+  <div>{{errorTodo}}</div>
   <div class="todoList">
     <div>
       <mat-form-field class="example-form-field">
         <mat-label>Search</mat-label>
-        <input #SearchTodo (input)='searchValue($event)' (blur)='SearchTodo.value =""; searchTextReset()' matInput type="text">
+        <input #SearchTodo (input)='searchValue($event)' (blur)='SearchTodo.value =""; searchTextReset()' matInput
+          type="text">
       </mat-form-field>
       <section class="example-section">
         <mat-radio-group (change)='onChangeFilter($event)'>
@@ -35,7 +46,7 @@
           <mat-radio-button class="example-margin" value=true>Undone</mat-radio-button>
         </mat-radio-group>
       </section>
-      <div>
+      <ng-container *ngIf='noTodo; else NoTodo'>
         <ul class='ulTodo'>
           <li *ngFor="let item of todos">
             <ng-container *ngIf='currentIdList === item._idList'>
@@ -50,7 +61,7 @@
             </ng-container>
           </li>
         </ul>
-      </div>
+      </ng-container>
     </div>
     <div class='inputNewTodo'>
       <mat-form-field class="example-form-field">
@@ -60,4 +71,7 @@
       <button (click)="outList()" class="button" mat-raised-button color="primary">Back</button>
     </div>
   </div>
+</ng-template>
+<ng-template class="noList" #NoTodo>
+  <h1>Сreate a new list.</h1>
 </ng-template>
