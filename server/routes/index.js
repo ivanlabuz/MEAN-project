@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-let ListSchema = require('../mongoose/models/listSchema');
-let TodoSchema = require('../mongoose/models/todoSchema');
+const express = require('express');
+const router = express.Router();
+const ListSchema = require('../mongoose/models/listSchema');
+const TodoSchema = require('../mongoose/models/todoSchema');
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
@@ -19,7 +19,7 @@ router.post('/', async function (req, res) {
   if (
     req.body._idList &&
     req.body.text &&
-    req.body.done !== undefined
+    req.body.done != undefined
   ) {
     const todoSchema = new TodoSchema({
       _idList: req.body._idList,
@@ -56,7 +56,7 @@ router.post('/', async function (req, res) {
       req.body._id &&
       req.body._idList &&
       req.body.text &&
-      req.body.done !== undefined
+      req.body.done != undefined
     ) {
       const todoSchema = new TodoSchema({
         _id: req.body._id,

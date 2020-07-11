@@ -11,15 +11,17 @@ interface TodoClass {
 @Injectable()
 export class HttpService {
 
+  server = 'http://localhost:8000/';
+
   constructor(private http: HttpClient) { }
 
   getData() {
-    return this.http.get('http://localhost:8000/');
+    return this.http.get(this.server);
   }
 
   postList(newList: string) {
     const body = { text: newList };
-    return this.http.post('http://localhost:8000/', body);
+    return this.http.post(this.server, body);
   }
 
   postTodo(newCurrentTodo: any) {
@@ -28,10 +30,10 @@ export class HttpService {
       text: newCurrentTodo.text,
       done: newCurrentTodo.done
     };
-    return this.http.post('http://localhost:8000/', body);
+    return this.http.post(this.server, body);
   }
 
   putTodo(newTodo: TodoClass) {
-    return this.http.put('http://localhost:8000/', newTodo);
+    return this.http.put(this.server, newTodo);
   }
 }

@@ -49,13 +49,14 @@ export class AppComponent implements OnInit {
     const editTodo = this.todos.find(item => item._id === id);
     editTodo.done = true;
     this.httpService.putTodo(editTodo).subscribe(
-      (data: Todo) => data,
-      error => { this.errorTodo = error.message; console.log(error); });
-    this.todos.forEach(item => {
-      if (item._id === id) {
-        item.done = true;
-      }
-    });
+      (data: Todo) => {
+        this.todos.forEach(item => {
+          if (item._id === id) {
+            item.done = true;
+          }
+        },
+          error => { this.errorTodo = error.message; console.log(error); });
+      });
   }
 
   onChangeFilter(event: MatRadioChange): void {
@@ -63,7 +64,7 @@ export class AppComponent implements OnInit {
   }
 
   newTodo(value: string): void {
-    if (value) {
+    if (value.trim()) {
       const newCurrentTodo = {
         _idList: this.currentIdList,
         text: value,
@@ -71,10 +72,15 @@ export class AppComponent implements OnInit {
       };
       this.httpService.postTodo(newCurrentTodo)
         .subscribe(
-          (data: Todo) => this.todos.push(data),
+          (data: Todo) => {
+            this.todos.push(data),
+              this.noTodo = true,
+              (document.getElementById('inputTodo') as HTMLInputElement).value = '';
+          },
           error => console.log(error)
         );
-      this.noTodo = true;
+    } else {
+      (document.getElementById('inputTodo') as HTMLInputElement).value = '';
     }
   }
 
@@ -109,27 +115,16 @@ export class AppComponent implements OnInit {
     this.filter = false;
   }
 
-  addList(newList: string): void {
-    if (newList) {
-      this.httpService.postList(newList)
-        .subscribe(
-          (data: TodoList) => this.todoLists.push(data),
-          error => console.log(error)
-        );
-    }
-  }
-
-  newListName(event: any): void {
-    this.newNameForList = event.target.value;
-  }
-
   clickCreate(): void {
-    if (this.newNameForList) {
+    if (this.newNameForList.trim()) {
       this.httpService.postList(this.newNameForList)
-        .subscribe(
-          (data: TodoList) => this.todoLists.push(data),
-          error => console.log(error)
-        );
+        .subscribe((data: TodoList) => {
+          this.newNameForList = '',
+          this.todoLists.push(data);
+        },
+          error => console.log(error));
+    } else {
+      this.newNameForList = '';
     }
   }
 
